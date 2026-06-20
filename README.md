@@ -10,8 +10,6 @@ This project is a lightweight, self-contained social media platform. The entire 
 
 The app is designed to be easy to run locally — just install dependencies and start the server. Everything from authentication to the animated canvas background is handled in-house.
 
----
-
 ## Features
 
 ### Authentication
@@ -66,24 +64,6 @@ The app is designed to be easy to run locally — just install dependencies and 
 | Database | SQLite via Node built-in `node:sqlite` (Node v22+)  |
 | Auth     | `express-session`, `bcryptjs`                       |
 
----
-
-## Database Schema
-
-The database is created automatically at `server/social.db` on first run.
-
-| Table      | Description                                      |
-|------------|--------------------------------------------------|
-| `users`    | Stores account info: username, email, password hash, avatar, bio |
-| `posts`    | Stores posts with content, optional image, and user reference |
-| `likes`    | Join table linking users and posts they liked    |
-| `comments` | Stores comments linked to a post and a user      |
-| `follows`  | Join table linking follower and following user IDs |
-
-All tables use `ON DELETE CASCADE` so deleting a user or post automatically removes all related likes, comments, and follows.
-
----
-
 ## Getting Started
 
 ### Prerequisites
@@ -109,81 +89,9 @@ npm install
 ### Run the App
 
 ```bash
-npm start
+npx serve .
 ```
 
 Open your browser at **http://localhost:3000**
 
 The database file `server/social.db` is created automatically on first run.
-
----
-
-## Project Structure
-
-```
-├── index.html          # Main frontend page (single-page app)
-├── styles.css          # All styling
-├── app.js              # Frontend logic (likes, comments, feed, profiles)
-├── bg-canvas.js        # Animated canvas background
-├── package.json
-└── server/
-    ├── index.js        # Express app setup, session config, route mounting
-    ├── db.js           # SQLite setup, schema creation (WAL mode, foreign keys)
-    └── routes/
-        ├── auth.js     # Register, login, logout, get/update profile
-        ├── posts.js    # Create, delete, feed, user posts, toggle like
-        ├── comments.js # Add, get, delete comments
-        └── social.js   # Follow, unfollow, followers, following, suggestions
-```
-
----
-
-## API Reference
-
-### Auth — `/api/auth`
-
-| Method | Endpoint          | Auth Required | Description             |
-|--------|-------------------|---------------|-------------------------|
-| POST   | `/register`       | No            | Create a new account    |
-| POST   | `/login`          | No            | Login with email + password |
-| POST   | `/logout`         | No            | Destroy session         |
-| GET    | `/profile/:id`    | No            | Get any user's profile  |
-| PUT    | `/profile`        | Yes           | Update bio or avatar    |
-
-### Posts — `/api/posts`
-
-| Method | Endpoint       | Auth Required | Description                     |
-|--------|----------------|---------------|---------------------------------|
-| POST   | `/`            | Yes           | Create a new post               |
-| GET    | `/feed`        | Yes           | Get personalized feed (50 max)  |
-| GET    | `/user/:id`    | No            | Get all posts by a user         |
-| DELETE | `/:id`         | Yes           | Delete your own post            |
-| POST   | `/:id/like`    | Yes           | Toggle like on a post           |
-
-### Comments — `/api/comments`
-
-| Method | Endpoint    | Auth Required | Description               |
-|--------|-------------|---------------|---------------------------|
-| POST   | `/:postId`  | Yes           | Add a comment to a post   |
-| GET    | `/:postId`  | No            | Get all comments on a post|
-| DELETE | `/:id`      | Yes           | Delete your own comment   |
-
-### Social — `/api/social`
-
-| Method | Endpoint          | Auth Required | Description                        |
-|--------|-------------------|---------------|------------------------------------|
-| POST   | `/:id/follow`     | Yes           | Follow a user                      |
-| DELETE | `/:id/follow`     | Yes           | Unfollow a user                    |
-| GET    | `/:id/followers`  | No            | List a user's followers            |
-| GET    | `/:id/following`  | No            | List who a user follows            |
-| GET    | `/suggestions`    | Yes           | Get "who to follow" suggestions    |
-
----
-
-## Notes
-
-- Sessions are stored **in memory**. Restarting the server logs out all users.
-- The SQLite database runs in **WAL (Write-Ahead Logging)** mode for better performance.
-- Foreign key constraints are enabled (`PRAGMA foreign_keys=ON`).
-- No file upload support — images are stored as URLs in text fields.
-- The `PORT` environment variable is respected; defaults to `3000`.
