@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ApexCity — Islamic Social</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+<!-- TOPBAR -->
+<header class="topbar" role="banner">
+  <div class="topbar__logo">
+    <span class="logo-text">Apexcify Technologies</span>
+  </div>
+  <input id="search-bar" class="search-bar" type="search" placeholder="Search posts, users..." aria-label="Search" />
+  <div class="topbar__actions">
+    <button class="btn-icon" aria-label="Notifications">
+      🔔<span class="badge">3</span>
+    </button>
+    <button id="avatar-btn" class="btn-icon" aria-label="Assalamu Alaikum, Ahmad" title="Assalamu Alaikum, Ahmad!" aria-haspopup="true" aria-expanded="false">
+      <img class="avatar avatar--md" src="https://i.pravatar.cc/150?img=1" alt="Ahmad" />
+    </button>
+    <!-- Profile dropdown — must be inside topbar__actions for positioning -->
+    <div id="profile-dropdown" class="profile-dropdown" role="menu" aria-label="Profile menu">
+      <div class="profile-dropdown__header">
+        <img class="avatar avatar--md" src="https://i.pravatar.cc/150?img=1" alt="Ahmad" />
+        <div>
+          <div id="dropdown-name" style="font-weight:700;font-size:14px">Ahmad</div>
+          <div id="dropdown-handle" style="font-size:12px;color:var(--text-dark-gray)">@AhmadDev</div>
+        </div>
+      </div>
+      <div class="profile-dropdown__divider"></div>
+      <a class="profile-dropdown__item" href="#" data-nav="home" role="menuitem">👤 Profile</a>
+      <a class="profile-dropdown__item" href="#" data-nav="settings" role="menuitem">⚙️ Settings</a>
+      <div class="profile-dropdown__divider"></div>
+      <a class="profile-dropdown__item profile-dropdown__item--danger" href="#" id="btn-logout" role="menuitem">🚪 Logout</a>
+    </div>
+  </div>
+</header>
+
+<!-- LAYOUT -->
+<div class="app-layout">
+
+
+<!-- LEFT SIDEBAR -->
+<aside class="sidebar" aria-label="Navigation">
+  <div class="profile-mini">
+    <img id="sidebar-avatar" class="profile-mini__avatar" src="https://i.pravatar.cc/150?img=1" alt="Ahmad" />
+    <div id="sidebar-name" class="profile-mini__name">Ahmad</div>
+    <div id="sidebar-handle" class="profile-mini__handle">@AhmadDev</div>
+    <div class="profile-mini__stats">
+      <div><strong>1.2K</strong><span>Posts</span></div>
+      <div><strong>5.2K</strong><span>Followers</span></div>
+      <div><strong>840</strong><span>Following</span></div>
+    </div>
+  </div>
+  <div class="sidebar-divider"></div>
+  <nav class="sidebar-nav" aria-label="Main navigation">
+    <a class="sidebar-nav__item active" href="#home">
+      <span class="icon">🏠</span><span>Home</span>
+    </a>
+    <a class="sidebar-nav__item" href="#explore">
+      <span class="icon">🔍</span><span>Explore</span>
+    </a>
+    <a class="sidebar-nav__item" href="#notifications">
+      <span class="icon">🔔</span><span>Notifications</span>
+      <span class="nav-badge">3</span>
+    </a>
+    <a class="sidebar-nav__item" href="#messages">
+      <span class="icon">📨</span><span>Messages</span>
+    </a>
+    <a class="sidebar-nav__item" href="#bookmarks">
+      <span class="icon">🏷️</span><span>Bookmarks</span>
+    </a>
+    <a class="sidebar-nav__item" href="#community">
+      <span class="icon">👥</span><span>Community</span>
+    </a>
+    <a class="sidebar-nav__item" href="#settings">
+      <span class="icon">⚙️</span><span>Settings</span>
+    </a>
+  </nav>
+  <div class="sidebar-bottom">
+    <button class="btn-darkmode">🌙 Dark Mode</button>
+  </div>
+</aside>
+
+
+<!-- MAIN FEED -->
+<main class="feed" role="main" aria-label="Main feed">
+
+  <!-- HOME SECTION -->
+  <div id="home-feed" class="page-section active">
+
+  <!-- Compose -->
+  <div class="compose-card" role="region" aria-label="Create post">
+    <div class="compose-card__top">
+      <img class="avatar avatar--md" src="https://i.pravatar.cc/150?img=1" alt="Ahmad" />
+      <textarea id="post-input" class="compose-input" rows="1" maxlength="280"
+        placeholder="What's on your mind, Ahmad?" aria-label="Post content"></textarea>
+    </div>
+    <!-- Media preview strip (hidden until file chosen) -->
+    <div id="media-preview" class="media-preview" hidden></div>
+    <div class="compose-card__actions">
+      <div class="compose-card__media">
+        <button class="btn-compose-action" id="btn-photo" aria-label="Photo">📷 Photo</button>
+        <button class="btn-compose-action" id="btn-video" aria-label="Video">🎥 Video</button>
+        <!-- Hidden file inputs -->
+        <input type="file" id="file-photo" accept="image/*" hidden />
+        <input type="file" id="file-video" accept="video/*" hidden />
+      </div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <span class="char-counter" id="char-counter">0 / 280</span>
+        <button class="btn-post" id="post-btn" disabled aria-label="Post">Post</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post 1 -->
+  <article class="card post-card" data-post-id="1">
+    <header class="post-card__header">
+      <a class="post-author" href="#" aria-label="Fatima Rahman">
+        <img class="avatar avatar--md" src="https://i.pravatar.cc/150?img=2" alt="Fatima" />
+        <div>
+          <span class="post-author__name">
+            Fatima Rahman
+            <svg class="verified-badge" viewBox="0 0 24 24" aria-label="Verified"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </span>
+          <span class="post-author__meta">@FatimaCreates · 2h ago</span>
+        </div>
+      </a>
+      <button class="btn-icon" aria-label="More options">···</button>
+    </header>
+    <div class="post-card__body">
+      <p class="post-card__text">Just shipped a new redesign using Islamic geometric patterns in the UI. The future for Muslim creators is bright! ✨ #IslamicTech #Design</p>
+      <div class="post-card__image-wrap">
+        <img class="post-card__image" src="https://picsum.photos/seed/islamic1/600/300" alt="Design preview" loading="lazy" />
+      </div>
+      <div class="post-card__tags">
+        <a class="tag" href="#">#IslamicTech</a>
+        <a class="tag" href="#">#Design</a>
+      </div>
+    </div>
+    <footer class="post-card__footer">
+      <div class="post-stats"><span>❤️ 2.4K</span><span>💬 341</span><span>🔁 128</span></div>
+      <div class="post-actions" role="group" aria-label="Post actions">
+        <button class="post-action like-btn" data-liked="false" aria-pressed="false" aria-label="Like">
+          <svg class="like-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <span class="like-count">2400</span>
+        </button>
+        <button class="post-action comment-toggle-btn" aria-expanded="false" aria-controls="c1" aria-label="Comments">
+          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span>341</span>
+        </button>
+        <button class="post-action" aria-label="Repost">
+          <svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+          <span>128</span>
+        </button>
+        <button class="post-action" aria-label="Share">📤 Share</button>
+        <button class="post-action bookmark-btn" data-bookmarked="false" aria-pressed="false" aria-label="Bookmark" style="margin-left:auto">🔖</button>
+      </div>
+      <div class="comments-section" id="c1" hidden>
+        <div class="comment">
+          <img class="avatar avatar--sm" src="https://i.pravatar.cc/150?img=5" alt="Aisha" />
+          <div class="comment__bubble">
+            <span class="comment__author">Aisha</span>
+            <p>MashaAllah! This work is beautiful! 🌟</p>
+            <div class="comment__actions">
+              <button class="like-btn post-action" data-liked="false" aria-pressed="false"><svg class="like-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="like-count">48</span></button>
+              <button class="post-action">Reply</button>
+            </div>
+          </div>
+        </div>
+        <div class="comment comment--compose">
+          <img class="avatar avatar--sm" src="https://i.pravatar.cc/150?img=1" alt="Ahmad" />
+          <div class="comment-input-wrap">
+            <input class="comment-input" type="text" placeholder="Write a comment..." maxlength="200" aria-label="Write a comment" />
+            <button class="btn-send" aria-label="Send"><svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </article>
+
+
+  <!-- Post 2 -->
+  <article class="card post-card" data-post-id="2">
+    <header class="post-card__header">
+      <a class="post-author" href="#" aria-label="Ahmed Hassan">
+        <img class="avatar avatar--md" src="https://i.pravatar.cc/150?img=6" alt="Ahmed" />
+        <div>
+          <span class="post-author__name">Ahmed Hassan</span>
+          <span class="post-author__meta">@AhmedDev · 5h ago</span>
+        </div>
+      </a>
+      <button class="btn-icon" aria-label="More options">···</button>
+    </header>
+    <div class="post-card__body">
+      <p class="post-card__text">AI-assisted code review cut our PR cycle time by 60%. Alhamdulillah — we are living in the future! 🚀 #TechForGood #AI</p>
+      <div class="post-card__tags">
+        <a class="tag" href="#">#TechForGood</a>
+        <a class="tag" href="#">#AI</a>
+      </div>
+    </div>
+    <footer class="post-card__footer">
+      <div class="post-stats"><span>❤️ 891</span><span>💬 74</span><span>🔁 215</span></div>
+      <div class="post-actions" role="group">
+        <button class="post-action like-btn" data-liked="false" aria-pressed="false" aria-label="Like">
+          <svg class="like-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <span class="like-count">891</span>
+        </button>
+        <button class="post-action comment-toggle-btn" aria-expanded="false" aria-controls="c2" aria-label="Comments">
+          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>74</span>
+        </button>
+        <button class="post-action" aria-label="Repost">
+          <svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg><span>215</span>
+        </button>
+        <button class="post-action" aria-label="Share">📤 Share</button>
+        <button class="post-action bookmark-btn" data-bookmarked="false" aria-pressed="false" aria-label="Bookmark" style="margin-left:auto">🔖</button>
+      </div>
+      <div class="comments-section" id="c2" hidden>
+        <div class="comment comment--compose">
+          <img class="avatar avatar--sm" src="https://i.pravatar.cc/150?img=1" alt="Ahmad" />
+          <div class="comment-input-wrap">
+            <input class="comment-input" type="text" placeholder="Write a comment..." maxlength="200" aria-label="Write a comment" />
+            <button class="btn-send" aria-label="Send"><svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </article>
+
+  <!-- Post 3 -->
+  <article class="card post-card" data-post-id="3">
+    <header class="post-card__header">
+      <a class="post-author" href="#" aria-label="Zainab Khan">
+        <img class="avatar avatar--md" src="https://i.pravatar.cc/150?img=3" alt="Zainab" />
+        <div>
+          <span class="post-author__name">
+            Zainab Khan
+            <svg class="verified-badge" viewBox="0 0 24 24" aria-label="Verified"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </span>
+          <span class="post-author__meta">@ZainabDesigns · 1d ago</span>
+        </div>
+      </a>
+      <button class="btn-icon" aria-label="More options">···</button>
+    </header>
+    <div class="post-card__body">
+      <p class="post-card__text">Clean code is not just about aesthetics — it's respect. For your future self, your teammates, and the product. Grateful to Allah for this career. #MuslimCreators</p>
+      <div class="post-card__image-wrap">
+        <img class="post-card__image" src="https://picsum.photos/seed/islamic2/600/280" alt="Code illustration" loading="lazy" />
+      </div>
+    </div>
+    <footer class="post-card__footer">
+      <div class="post-stats"><span>❤️ 5.1K</span><span>💬 302</span><span>🔁 1.2K</span></div>
+      <div class="post-actions" role="group">
+        <button class="post-action like-btn" data-liked="true" aria-pressed="true" aria-label="Unlike">
+          <svg class="like-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <span class="like-count">5100</span>
+        </button>
+        <button class="post-action comment-toggle-btn" aria-expanded="false" aria-controls="c3" aria-label="Comments">
+          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>302</span>
+        </button>
+        <button class="post-action" aria-label="Repost">
+          <svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg><span>1200</span>
+        </button>
+        <button class="post-action" aria-label="Share">📤 Share</button>
+        <button class="post-action bookmark-btn" data-bookmarked="false" aria-pressed="false" aria-label="Bookmark" style="margin-left:auto">🔖</button>
+      </div>
+      <div class="comments-section" id="c3" hidden>
+        <div class="comment comment--compose">
+          <img class="avatar avatar--sm" src="https://i.pravatar.cc/150?img=1" alt="Ahmad" />
+          <div class="comment-input-wrap">
+            <input class="comment-input" type="text" placeholder="Write a comment..." maxlength="200" aria-label="Write a comment" />
+            <button class="btn-send" aria-label="Send"><svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </article>
+
+  <!-- Post 4 -->
+  <article class="card post-card" data-post-id="4">
+    <header class="post-card__header">
+      <a class="post-author" href="#" aria-label="Muhammad Ali">
+        <img class="avatar avatar--md" src="https://i.pravatar.cc/150?img=4" alt="Muhammad" />
+        <div>
+          <span class="post-author__name">Muhammad Ali</span>
+          <span class="post-author__meta">@MuhammadWrites · 3h ago</span>
+        </div>
+      </a>
+      <button class="btn-icon" aria-label="More options">···</button>
+    </header>
+    <div class="post-card__body">
+      <p class="post-card__text">SubhanAllah — look at the power of typography. The right font completely changes the feeling. Plus Jakarta Sans is stunning! 🎨 #Design #MuslimCreators</p>
+      <div class="post-card__tags">
+        <a class="tag" href="#">#Design</a>
+        <a class="tag" href="#">#MuslimCreators</a>
+      </div>
+    </div>
+    <footer class="post-card__footer">
+      <div class="post-stats"><span>❤️ 673</span><span>💬 89</span><span>🔁 156</span></div>
+      <div class="post-actions" role="group">
+        <button class="post-action like-btn" data-liked="false" aria-pressed="false" aria-label="Like">
+          <svg class="like-icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <span class="like-count">673</span>
+        </button>
+        <button class="post-action comment-toggle-btn" aria-expanded="false" aria-controls="c4" aria-label="Comments">
+          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>89</span>
+        </button>
+        <button class="post-action" aria-label="Repost">
+          <svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg><span>156</span>
+        </button>
+        <button class="post-action" aria-label="Share">📤 Share</button>
+        <button class="post-action bookmark-btn" data-bookmarked="false" aria-pressed="false" aria-label="Bookmark" style="margin-left:auto">🔖</button>
+      </div>
+      <div class="comments-section" id="c4" hidden>
+        <div class="comment comment--compose">
+          <img class="avatar avatar--sm" src="https://i.pravatar.cc/150?img=1" alt="Ahmad" />
+          <div class="comment-input-wrap">
+            <input class="comment-input" type="text" placeholder="Write a comment..." maxlength="200" aria-label="Write a comment" />
+            <button class="btn-send" aria-label="Send"><svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </article>
+  </div><!-- /#home-feed -->
+
+  <!-- EXPLORE SECTION -->
+  <div id="explore-page" class="page-section">
+    <div class="page-section__inner">
+      <h2>🔍 Explore</h2>
+      <p>Discover trending posts, topics, and creators from the Muslim community around the world.</p>
+    </div>
+    <div class="panel-card">
+      <h3 class="panel-card__title">📈 Trending Topics</h3>
+      <div class="trending-item"><span class="trending-item__rank">01</span><div><a class="trending-item__tag" href="#">#IslamicTech</a><span class="trending-item__count">45.2K posts</span></div></div>
+      <div class="trending-item"><span class="trending-item__rank">02</span><div><a class="trending-item__tag" href="#">#MuslimCreators</a><span class="trending-item__count">38.9K posts</span></div></div>
+      <div class="trending-item"><span class="trending-item__rank">03</span><div><a class="trending-item__tag" href="#">#TechForGood</a><span class="trending-item__count">32.1K posts</span></div></div>
+      <div class="trending-item"><span class="trending-item__rank">04</span><div><a class="trending-item__tag" href="#">#CommunityFirst</a><span class="trending-item__count">28.7K posts</span></div></div>
+    </div>
+  </div>
+
+  <!-- NOTIFICATIONS SECTION -->
+  <div id="notifications-page" class="page-section">
+    <div class="page-section__inner">
+      <h2>🔔 Notifications</h2>
+      <p>You have 3 new notifications.</p>
+    </div>
+    <div class="panel-card">
+      <div class="activity-item"><img class="avatar avatar--sm" src="https://i.pravatar.cc/150?img=2" alt="Fatima" /><p><strong>Fatima</strong> liked your post</p><span class="activity-time">2m</span></div>
+      <div class="activity-item"><img class="avatar avatar--sm" src="https://i.pravatar.cc/150?img=6" alt="Ahmed" /><p><strong>Ahmed</strong> started following you</p><span class="activity-time">5m</span></div>
+      <div class="activity-item"><img class="avatar avatar--sm" src="https://i.pravatar.cc/150?img=7" alt="Mariam" /><p><strong>Mariam</strong> commented on your post</p><span class="activity-time">8m</span></div>
+    </div>
+  </div>
+
+  <!-- MESSAGES SECTION -->
+  <div id="messages-page" class="page-section">
+    <div class="page-section__inner">
+      <h2>📨 Messages</h2>
+      <p>Your direct messages will appear here. Start a conversation with someone you follow.</p>
+    </div>
+  </div>
+
+  <!-- BOOKMARKS SECTION -->
+  <div id="bookmarks-page" class="page-section">
+    <div id="bookmarks-list">
+      <div class="page-section__inner" id="bookmarks-empty">
+        <h2>🏷️ Bookmarks</h2>
+        <p>Posts you save will appear here. Click 🔖 on any post to bookmark it.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMMUNITY SECTION -->
+  <div id="community-page" class="page-section">
+    <div class="page-section__inner">
+      <h2>👥 Community</h2>
+      <p>Connect with the Muslim creators community. Join groups, discussions, and events.</p>
+    </div>
+    <div class="panel-card">
+      <h3 class="panel-card__title">👥 Suggested People</h3>
+      <div class="follow-item"><img class="avatar avatar--sm" src="https://i.pravatar.cc/150?img=5" alt="Aisha" /><div class="follow-item__info"><div class="follow-item__name">Aisha Al-Rashid</div><div class="follow-item__bio">Islamic Scholar</div></div><button class="btn-follow" data-following="false" aria-pressed="false">Follow</button></div>
+      <div class="follow-item"><img class="avatar avatar--sm" src="https://i.pravatar.cc/150?img=7" alt="Zainab" /><div class="follow-item__info"><div class="follow-item__name">Dr. Zainab</div><div class="follow-item__bio">Educationist</div></div><button class="btn-follow" data-following="false" aria-pressed="false">Follow</button></div>
+      <div class="follow-item"><img class="avatar avatar--sm" src="https://i.pravatar.cc/150?img=8" alt="Muhammad" /><div class="follow-item__info"><div class="follow-item__name">Muhammad Tech</div><div class="follow-item__bio">Tech Educator</div></div><button class="btn-follow" data-following="false" aria-pressed="false">Follow</button></div>
+    </div>
+  </div>
+
+  <!-- SETTINGS SECTION -->
+  <div id="settings-page" class="page-section">
+    <div class="settings-form">
+
+      <!-- Account -->
+      <div class="settings-group">
+        <div class="settings-group__title">👤 Account</div>
+        <div class="settings-row">
+          <div><div class="settings-label">Display Name</div></div>
+          <input id="settings-name" class="settings-input" type="text" value="Ahmad" />
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-label">Username</div></div>
+          <input id="settings-handle" class="settings-input" type="text" value="@AhmadDev" />
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-label">Email</div></div>
+          <input id="settings-email" class="settings-input" type="email" value="ahmad@apexcity.com" />
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-label">Bio</div></div>
+          <input id="settings-bio" class="settings-input" type="text" value="Full Stack Developer | Tech Enthusiast" />
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-label">Profile Picture</div><div class="settings-sublabel">JPG or PNG, shown on posts</div></div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <img id="settings-avatar-preview" class="avatar avatar--md" src="https://i.pravatar.cc/150?img=1" alt="Preview" style="cursor:pointer" title="Click to change" />
+            <input id="settings-avatar-input" type="file" accept="image/*" style="display:none" />
+            <button class="settings-save" id="settings-avatar-btn" style="padding:6px 14px;font-size:12px">Change</button>
+          </div>
+        </div>
+        <div class="settings-row" style="border-bottom:none;padding-bottom:0;justify-content:flex-end">
+          <button class="settings-save" id="settings-save-account">Save Changes</button>
+        </div>
+      </div>
+
+      <!-- Appearance -->
+      <div class="settings-group">
+        <div class="settings-group__title">🎨 Appearance</div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-label">Theme</div>
+            <div class="settings-sublabel">Choose your preferred color theme</div>
+          </div>
+          <div class="theme-options">
+            <button class="theme-btn active" data-theme="dark">🌙 Dark</button>
+            <button class="theme-btn" data-theme="pink">💗 Pink</button>
+            <button class="theme-btn" data-theme="teal">🌊 Teal</button>
+          </div>
+        </div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-label">Compact Mode</div>
+            <div class="settings-sublabel">Reduce spacing between posts</div>
+          </div>
+          <label class="toggle"><input type="checkbox" id="toggle-compact" /><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+
+      <!-- Notifications -->
+      <div class="settings-group">
+        <div class="settings-group__title">🔔 Notifications</div>
+        <div class="settings-row">
+          <div><div class="settings-label">Likes</div><div class="settings-sublabel">When someone likes your post</div></div>
+          <label class="toggle"><input type="checkbox" id="toggle-notif-likes" checked /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-label">Comments</div><div class="settings-sublabel">When someone comments on your post</div></div>
+          <label class="toggle"><input type="checkbox" id="toggle-notif-comments" checked /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-label">New Followers</div><div class="settings-sublabel">When someone follows you</div></div>
+          <label class="toggle"><input type="checkbox" id="toggle-notif-follows" checked /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-label">Messages</div><div class="settings-sublabel">When you receive a direct message</div></div>
+          <label class="toggle"><input type="checkbox" id="toggle-notif-messages" /><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+
+      <!-- Privacy -->
+      <div class="settings-group">
+        <div class="settings-group__title">🔒 Privacy</div>
+        <div class="settings-row">
+          <div><div class="settings-label">Private Account</div><div class="settings-sublabel">Only approved followers see your posts</div></div>
+          <label class="toggle"><input type="checkbox" id="toggle-private" /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-label">Show Online Status</div><div class="settings-sublabel">Let others see when you're active</div></div>
+          <label class="toggle"><input type="checkbox" id="toggle-online" checked /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-label">Allow Message Requests</div><div class="settings-sublabel">Receive messages from non-followers</div></div>
+          <label class="toggle"><input type="checkbox" id="toggle-msg-requests" checked /><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+
+  <!-- RIGHT PANEL -->
+  <aside class="right-panel" aria-label="Suggestions and trending">
+
+    <!-- Who to Follow -->
+    <div class="panel-card">
+      <h3 class="panel-card__title">👥 Who to Follow</h3>
+
+      <div class="follow-item">
+        <img class="avatar avatar--sm" src="https://i.pravatar.cc/150?img=5" alt="Aisha" />
+        <div class="follow-item__info">
+          <div class="follow-item__name">Aisha Al-Rashid
+            <svg class="verified-badge" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <div class="follow-item__handle">@AishaAlRashid</div>
+          <div class="follow-item__bio">Islamic Scholar</div>
+        </div>
+        <button class="btn-follow" data-following="false" aria-pressed="false">Follow</button>
+      </div>
+
+      <div class="follow-item">
+        <img class="avatar avatar--sm" src="https://i.pravatar.cc/150?img=7" alt="Zainab" />
+        <div class="follow-item__info">
+          <div class="follow-item__name">Dr. Zainab</div>
+          <div class="follow-item__handle">@DrZainab</div>
+          <div class="follow-item__bio">Educationist</div>
+        </div>
+        <button class="btn-follow" data-following="false" aria-pressed="false">Follow</button>
+      </div>
+
+      <div class="follow-item">
+        <img class="avatar avatar--sm" src="https://i.pravatar.cc/150?img=8" alt="Muhammad" />
+        <div class="follow-item__info">
+          <div class="follow-item__name">Muhammad Tech</div>
+          <div class="follow-item__handle">@MuhammadTech</div>
+          <div class="follow-item__bio">Tech Educator</div>
+        </div>
+        <button class="btn-follow" data-following="false" aria-pressed="false">Follow</button>
+      </div>
+    </div>
+
+    <!-- Trending -->
+    <div class="panel-card">
+      <h3 class="panel-card__title">📈 Trending Now</h3>
+      <div class="trending-item">
+        <span class="trending-item__rank">01</span>
+        <div><a class="trending-item__tag" href="#">#IslamicTech</a><span class="trending-item__count">45.2K posts</span></div>
+      </div>
+      <div class="trending-item">
+        <span class="trending-item__rank">02</span>
+        <div><a class="trending-item__tag" href="#">#MuslimCreators</a><span class="trending-item__count">38.9K posts</span></div>
+      </div>
+      <div class="trending-item">
+        <span class="trending-item__rank">03</span>
+        <div><a class="trending-item__tag" href="#">#TechForGood</a><span class="trending-item__count">32.1K posts</span></div>
+      </div>
+      <div class="trending-item">
+        <span class="trending-item__rank">04</span>
+        <div><a class="trending-item__tag" href="#">#CommunityFirst</a><span class="trending-item__count">28.7K posts</span></div>
+      </div>
+      <div class="trending-item">
+        <span class="trending-item__rank">05</span>
+        <div><a class="trending-item__tag" href="#">#DesignForAll</a><span class="trending-item__count">19.5K posts</span></div>
+      </div>
+    </div>
+
+    <!-- Live Activity -->
+    <div class="panel-card">
+      <h3 class="panel-card__title"><span class="live-dot"></span> Live Activity</h3>
+      <div class="activity-item">
+        <img class="avatar avatar--sm" src="https://i.pravatar.cc/150?img=2" alt="Fatima" />
+        <p><strong>Fatima</strong> liked your post</p>
+        <span class="activity-time">2m</span>
+      </div>
+      <div class="activity-item">
+        <img class="avatar avatar--sm" src="https://i.pravatar.cc/150?img=6" alt="Ahmed" />
+        <p><strong>Ahmed</strong> started following you</p>
+        <span class="activity-time">5m</span>
+      </div>
+      <div class="activity-item">
+        <img class="avatar avatar--sm" src="https://i.pravatar.cc/150?img=7" alt="Mariam" />
+        <p><strong>Mariam</strong> commented on your post</p>
+        <span class="activity-time">8m</span>
+      </div>
+    </div>
+
+  </aside>
+
+</div><!-- /.app-layout -->
+
+<div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="bg-canvas.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
